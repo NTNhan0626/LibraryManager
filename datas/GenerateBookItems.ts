@@ -1,19 +1,9 @@
-import { GenerateBooks } from "../datas/generateBooks";
+
 import { Book } from "../models/Book";
 import { BookItem } from "../models/BookItem";
 
 export class GenerateBookItems {
     
-    
-
-    constructor() {
-        const generator = new GenerateBooks();
-      
-        
-
-        
-    }
-
     public generateItemsForBooks(books: Book[]): BookItem[] {
         let arrBookItem : BookItem[] =[];
         for (const book of books) {
@@ -29,8 +19,4 @@ export class GenerateBookItems {
         }
         return arrBookItem;
     }
-
-    
-
-   
 }

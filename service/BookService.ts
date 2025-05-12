@@ -1,17 +1,10 @@
-import { GenerateBookItems } from "../datas/GenerateBookItems";
-import { GenerateBooks } from "../datas/generateBooks";
+import { LibraryDataProvider } from "../datas/LibraryDataProvider";
 import { Book } from "../models/Book";
 import { BookItem } from "../models/BookItem";
 
 export class BookService {
-    private books: Book[];
-    private bookItems : BookItem[];
-    constructor() {
-        const generatorBook = new GenerateBooks;
-        const generateBookItem = new GenerateBookItems;
-        this.books = generatorBook.generateBook(10);
-        this.bookItems = generateBookItem.generateItemsForBooks(this.books);
-    }
+    private books:Book[] = LibraryDataProvider.getBooks();
+    private bookItems:BookItem[] = LibraryDataProvider.getBookItems();
 
     createBook(book: { id: string, title: string, author: string }): Book {
         const newBook = new Book(book.id, book.title, book.author)
@@ -39,9 +32,4 @@ export class BookService {
     getBookItems(idBook:string){
         return this.bookItems.filter(item => item.getIdBook() === idBook);
     }
-    
-
-
-
-
 }
