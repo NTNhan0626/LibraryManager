@@ -14,7 +14,9 @@ export class BookItemService {
         const rawBookItem = JsonStorageProvider.readFromFile<BookItem>("BooksItem.json");
         this.bookItems = rawBookItem.map(data => new BookItem(data.id,data.idBook,data.available));
     }
-
+    getAllBookItem():BookItem[]{
+        return this.bookItems;
+    }
     createBookItem(data:{id:string,idBook:string,available:boolean}) : BookItem{
         const bookItem = new BookItem(data.id,data.idBook,data.available);
         this.bookItems.push(bookItem);

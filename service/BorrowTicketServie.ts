@@ -8,7 +8,7 @@ export class BorrowTicketService{
 
     constructor(){
         const rawBorrowTicket = JsonStorageProvider.readFromFile<IBorrowTicket>("BorrowTicket.json");
-        this.arrBorrowTicket = rawBorrowTicket.map(data => new BorrowTicket(data.id,data.userId,data.bookItemId,data.borrowDate,data.dueDate));
+        this.arrBorrowTicket = rawBorrowTicket.map(data => new BorrowTicket(data.id,data.userId,data.bookItemId,data.borrowDate,data.dueDate,data.returnDate?new Date(data.returnDate):null,data.isReturned));
     }
 
     private bookItemService = new BookItemService();

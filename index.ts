@@ -49,6 +49,7 @@ function showMenuUser() {
     console.log("\n USER MANAGEMENT SYSTEM");
     console.log("1. Add User");
     console.log("2. View All Users");
+    console.log("3. Update User")
     console.log("0. Exit");
 }
 
@@ -57,9 +58,10 @@ function showMenuBook() {
     console.log("1. Add Book");
     console.log("2. View All Books");
     console.log("3. Create Book Copy (BookItem)");
-    console.log("4. Borrow a Book");
-    console.log("5. Return a Book");
-    console.log("6. View All Borrow Tickets");
+    console.log("4. View All Book Copy")
+    console.log("5. Borrow a Book");
+    console.log("6. Return a Book");
+    console.log("7. View All Borrow Tickets");
     console.log("0. Exit");
 }
 
@@ -88,6 +90,15 @@ while (running) {
                     case "2":
                         console.table(userService.getAllUser());
                         break;
+                    case "3":{
+                        const userId = inputNotEmpty("User Id: ");
+                        const userName = inputNotEmpty("Name: ");
+                        const phone = inputNotEmpty("Phone number: ");
+                        userService.updateUser(userId,{name:userName,phone:phone});
+                        console.log("update user success"); 
+                        break;
+                    }
+
                     case "0":
                         check = false;
                         break;
@@ -130,7 +141,11 @@ while (running) {
                         console.log("✅ BookItem created successfully.");
                         break;
                     }
-                    case "4": {
+                    case "4":{
+                        console.table(bookItemService.getAllBookItem());
+                        break;
+                    }
+                    case "5": {
                         const ticketId = inputNotEmpty("Borrow Ticket ID: ");
                         const uId = inputNotEmpty("User ID: ");
                         const biId = inputNotEmpty("BookItem ID: ");
@@ -148,13 +163,13 @@ while (running) {
                         console.log("✅ Borrow ticket created.");
                         break;
                     }
-                    case "5": {
+                    case "6": {
                         const returnId = inputNotEmpty("Borrow Ticket ID to return: ");
                         borrowTicketService.returnBorrowTicket(returnId);
                         console.log("✅ Book returned successfully.");
                         break;
                     }
-                    case "6":
+                    case "7":
                         console.table(borrowTicketService.getAllBorrowTicket());
                         break;
                     case "0":

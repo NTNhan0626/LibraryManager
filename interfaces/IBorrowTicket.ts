@@ -4,6 +4,6 @@ export interface IBorrowTicket {
     bookItemId: string;
     borrowDate: Date;
     dueDate: Date;
-    returnDate?: Date | null;
+    returnDate?: Date | null ;
     isReturned?: boolean;
 }
