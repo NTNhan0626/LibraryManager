@@ -4,3 +4,10 @@ Book: Class này đóng vai trò là đầu sách, mỗi đầu sách có 1 ho�
 BookItem: Class này là các cuốn sách của đầu sách, mỗi cuốn sách phải thuộc 1 đầu sách nào đó
 BorrowTicket: Phiếu mượn sách trong phiếu này sẽ thuộc về 1 user, và có cuốn sách trong phiếu
 User: Người mượn sách 1 người có thể có 1 hoặc nhiều phiếu mượn
+# Xây dựng các chức năng 
+- thêm user
+- chỉnh sửa thông tin user
+- xem user
+- xem,thêm,sửa đầu sách, xem các sách có trong đầu sách 
+- xem, thêm, sửa sách
+- mượn,trả sách.
