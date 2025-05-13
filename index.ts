@@ -1,45 +1,100 @@
+import readline from "readline-sync";
+import { UserService } from "./service/UserService";
 import { BookService } from "./service/BookService";
+import { BookItemService } from "./service/BookItemService";
+import { BorrowTicketService } from "./service/BorrowTicketServie";
 
+const userService = new UserService();
 const bookService = new BookService();
+const bookItemService = new BookItemService();
+const borrowTicketService = new BorrowTicketService();
 
-// 1. Kiểm tra danh sách ban đầu
-console.log("📚 Initial list of books:");
-console.log(bookService.getAllBook());
+function showMenu() {
+    console.log("\n📚 LIBRARY MANAGEMENT SYSTEM");
+    console.log("1. Add User");
+    console.log("2. View All Users");
+    console.log("3. Add Book");
+    console.log("4. View All Books");
+    console.log("5. Create Book Copy (BookItem)");
+    console.log("6. Borrow a Book");
+    console.log("7. Return a Book");
+    console.log("8. View All Borrow Tickets");
+    console.log("0. Exit");
+}
 
-// 2. Tạo một cuốn sách mới
-console.log("\n➕ Creating a new book:");
-const newBook = bookService.createBook({
-    id: 'b101',
-    title: 'The Art of War',
-    author: 'Sun Tzu'
-});
-console.log(newBook);
+let running = true;
 
-// 3. Kiểm tra lại danh sách sau khi thêm
-console.log("\n📚 Updated list of books:");
-console.log(bookService.getAllBook());
+while (running) {
+    showMenu();
+    const choice = readline.question("👉 Enter your choice: ");
 
-// 4. Lấy thông tin sách theo id
-console.log("\n🔍 Get book by ID = 'b101':");
-const bookById = bookService.getBook('b101');
-console.log(bookById);
+    switch (choice) {
+        case "1":
+            const userId = readline.question("User ID: ");
+            const userName = readline.question("Name: ");
+            const phone = readline.question("Phone number: ");
+            const newUser = userService.createUser({ id: userId, name: userName, phone });
+            userService.arrUser.push(newUser);
+            console.log("✅ User added successfully.");
+            break;
 
-// 5. Cập nhật thông tin sách
-console.log("\n✏️ Updating book 'b101':");
-const updateResult = bookService.updateBook('b101', {
-    title: 'The Art of War - Revised',
-    author: 'Sun Tzu Master'
-});
-console.log("✅ Update successful?", updateResult);
+        case "2":
+            console.table(userService.getAllUser());
+            break;
 
-// 6. Lấy lại sách sau khi update
-console.log("\n📘 Book after update:");
-console.log(bookService.getBook('b101'));
+        case "3":
+            const bookId = readline.question("Book ID: ");
+            const title = readline.question("Title: ");
+            const author = readline.question("Author: ");
+            const book = bookService.createBook({ id: bookId, title, author });
+            console.log("✅ Book added successfully.");
+            break;
 
-// 7. Thử update cuốn không tồn tại
-console.log("\n❌ Updating non-existent book:");
-const failUpdate = bookService.updateBook('nonexistent-id', {
-    title: 'Not Found',
-    author: 'Nobody'
-});
-console.log("✅ Update successful?", failUpdate);
+        case "4":
+            console.table(bookService.getAllBook());
+            break;
+
+        case "5":
+            const bookItemId = readline.question("BookItem ID: ");
+            const bookRefId = readline.question("Book ID: ");
+            const bookItem = bookItemService.createBookItem({ id: bookItemId, idBook: bookRefId, available: true });
+            console.log("✅ BookItem created successfully.");
+            break;
+
+        case "6":
+            const ticketId = readline.question("Borrow Ticket ID: ");
+            const uId = readline.question("User ID: ");
+            const biId = readline.question("BookItem ID: ");
+            const borrowDate = new Date(readline.question("Borrow Date (yyyy-mm-dd): "));
+            const dueDate = new Date( readline.question("Due Date (yyyy-mm-dd): "));
+            const ticket = borrowTicketService.createBorrowTicket({
+                id: ticketId,
+                userId: uId,
+                bookItemId: biId,
+                borrowDate,
+                dueDate,
+                returnDate: null,
+                isReturned: false
+            });
+            console.log("✅ Borrow ticket created.");
+            break;
+
+        case "7":
+            const returnId = readline.question("Borrow Ticket ID to return: ");
+            borrowTicketService.returnBorrowTicket(returnId);
+            console.log("✅ Book returned successfully.");
+            break;
+
+        case "8":
+            console.table(borrowTicketService.getAllBorrowTicket());
+            break;
+
+        case "0":
+            running = false;
+            console.log("👋 Goodbye!");
+            break;
+
+        default:
+            console.log("❌ Invalid choice. Please try again.");
+    }
+}

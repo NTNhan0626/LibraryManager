@@ -29,6 +29,9 @@ export class BorrowTicketService{
         }
         return borrowTicket;
     }
+    getBorrowTicketByUserId(userId:string):BorrowTicket[]{
+        return this.arrBorrowTicket.filter(bt => bt.userId === userId);
+    }
     
 
 }
