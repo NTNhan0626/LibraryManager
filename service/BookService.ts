@@ -1,14 +1,26 @@
-import { LibraryDataProvider } from "../datas/LibraryDataProvider";
+import { GenerateBooks } from "../datas/GenerateBooks";
+import { JsonStorageProvider } from "../datas/JsonStorageProvider";
+import { KindBooks } from "../enums/KindBooks";
+import { IBook } from "../interfaces/IBook";
 import { Book } from "../models/Book";
 import { BookItem } from "../models/BookItem";
 
 export class BookService {
-    private books:Book[] = LibraryDataProvider.getBooks();
-    private bookItems:BookItem[] = LibraryDataProvider.getBookItems();
+    private books:Book[] = [];
+    private bookItems:BookItem[] = [];
 
-    createBook(book: { id: string, title: string, author: string }): Book {
-        const newBook = new Book(book.id, book.title, book.author)
+    constructor(){
+        GenerateBooks.generateBook(10);
+        const rawBook = JsonStorageProvider.readFromFile<IBook>("Books.json");
+        this.books = rawBook.map(data => new Book(data.id,data.title,data.author,data.kind));
+        const rawBookItem = JsonStorageProvider.readFromFile<BookItem>("BooksItem.json");
+        this.bookItems = rawBookItem.map(data => new BookItem(data.id,data.idBook,data.available))
+    }
+
+    createBook(book: { id: string, title: string, author: string ,kind:KindBooks[]}): Book {
+        const newBook = new Book(book.id, book.title, book.author,book.kind)
         this.books.push(newBook);
+        JsonStorageProvider.writeToFile<Book>("Books.json",this.books);
         return newBook;
     }
     getBook(id: string): Book {
@@ -25,6 +37,7 @@ export class BookService {
         } else {
             return false;
         }
+        JsonStorageProvider.writeToFile<Book>("Books.json",this.books);
 
         return true;
     }

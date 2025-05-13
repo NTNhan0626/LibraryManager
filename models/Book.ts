@@ -1,10 +1,12 @@
+import { KindBooks } from "../enums/KindBooks";
 import { IBook } from "../interfaces/IBook";
 
 export class Book implements IBook {
     constructor(
         public id: string,
         public title: string,
-        public author: string
+        public author: string,
+        public kind: KindBooks[]
     ) {}
 
     // Getter và Setter cho id

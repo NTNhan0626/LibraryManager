@@ -1,14 +1,23 @@
+import { JsonStorageProvider } from "../datas/JsonStorageProvider";
 import { IBorrowTicket } from "../interfaces/IBorrowTicket";
 import { BorrowTicket } from "../models/BorrowTicket";
 import { BookItemService } from "./BookItemService";
 
 export class BorrowTicketService{
     private arrBorrowTicket: BorrowTicket[] =[];
-    private bookItemService = new BookItemService;
+
+    constructor(){
+        const rawBorrowTicket = JsonStorageProvider.readFromFile<IBorrowTicket>("BorrowTicket.json");
+        this.arrBorrowTicket = rawBorrowTicket.map(data => new BorrowTicket(data.id,data.userId,data.bookItemId,data.borrowDate,data.dueDate));
+    }
+
+    private bookItemService = new BookItemService();
     createBorrowTicket(data:Required<IBorrowTicket>){
         const borrowTicket = new BorrowTicket(data.id,data.userId,data.bookItemId,data.borrowDate,data.dueDate,data.returnDate,data.isReturned);
         
         if(borrowTicket) {this.arrBorrowTicket.push(borrowTicket)};
+        this.bookItemService.borrowBookItem(data.bookItemId);
+        JsonStorageProvider.writeToFile<BorrowTicket>("BorrowTicket.json",this.arrBorrowTicket);
         return borrowTicket;
 
     }
@@ -16,6 +25,8 @@ export class BorrowTicketService{
         const borrowTicket =  this.arrBorrowTicket.find(bt=>bt.id === id);
         if(borrowTicket){
             borrowTicket.isReturned = true;
+            borrowTicket.returnDate = new Date();
+            JsonStorageProvider.writeToFile<BorrowTicket>("BorrowTicket.json",this.arrBorrowTicket);
             this.bookItemService.returnBookItem(borrowTicket.bookItemId);
         }
     }

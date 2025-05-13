@@ -1,10 +1,11 @@
 
 import { Book } from "../models/Book";
 import { BookItem } from "../models/BookItem";
+import { JsonStorageProvider } from "./JsonStorageProvider";
 
 export class GenerateBookItems {
     
-    public generateItemsForBooks(books: Book[]): BookItem[] {
+    public static generateItemsForBooks(books: Book[]): void {
         let arrBookItem : BookItem[] =[];
         for (const book of books) {
             for (let i = 1; i <= 3; i++) {
@@ -17,6 +18,7 @@ export class GenerateBookItems {
                 arrBookItem.push(item);
             }
         }
-        return arrBookItem;
+        JsonStorageProvider.writeToFile<BookItem>("BooksItem.json",arrBookItem);
+        
     }
 }

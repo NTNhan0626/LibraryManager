@@ -1,8 +1,8 @@
 export class BookItem {
     constructor(
-        private id: string,
-        private idBook: string,
-        private available: boolean
+        public id: string,
+        public idBook: string,
+        public available: boolean
     ) {}
 
     // Getter và Setter cho id
